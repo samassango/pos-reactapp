@@ -5,7 +5,8 @@ import Login from './components/Login';
 import Home from './components/Home';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import AppBar from 'material-ui/AppBar';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import * as actions from './actions/LoginAction';
 class App extends Component {
   constructor(props){
     super(props);
@@ -25,12 +26,19 @@ class App extends Component {
           <div className="App-intro">
           {this.state.isAuthenticated ?
              <Home currentUser={this.state.currentUser}/>:
-            <Login />}
+            <Login loginRequest={this.props.loginRequest}/>}
           </div>
       </div>
       </MuiThemeProvider>
     );
   }
 }
-
-export default App;
+const mapStateToProps = (state) =>({
+  login: state.currentUser,
+})
+ const bindAction = (dispatch) =>{
+  return{
+    loginRequest: (email, password) => dispatch(actions.loginRequest(email, password)),
+  }
+}
+export default connect(mapStateToProps, bindAction) (App);
